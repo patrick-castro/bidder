@@ -24,16 +24,19 @@ export default async function Home() {
   };
 
   return (
-    <main className='container mx-auto py-12'>
-      {session ? <SignOut /> : <SignIn />}
-      <form action={handleSubmitForm}>
-        <Input name='name' placeholder='Name your item' />
-        <Button type='submit'>Post Item</Button>
-      </form>
+    <main className='container mx-auto py-12 space-y-8'>
+      <h1 className='text-4xl font-bold'>Items for Sale</h1>
 
-      {allItems.map((item) => {
-        return <div key={item.id}>{item.name}</div>;
-      })}
+      <div className='grid grid-cols-4 gap-4'>
+        {allItems.map((item) => {
+          return (
+            <div key={item.id} className='border p-8 rounded-xl'>
+              {item.name}
+              starting price: ${item.startingPrice / 100}
+            </div>
+          );
+        })}
+      </div>
     </main>
   );
 }
