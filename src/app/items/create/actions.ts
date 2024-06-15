@@ -4,20 +4,35 @@ import { database } from '@/db/database';
 import { items } from '@/db/schema';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
+import { getSignedURLForS3Object } from '@/lib/s3';
 
-export async function createItemAction(formData: FormData) {
+interface CreateItemActionProps {
+  fileName: string;
+  name: string;
+  startingPrice: number;
+}
+
+export async function createUploadUrlAction(
+  key: string,
+  fileType: string,
+  fileSize: number
+) {
+  return await getSignedURLForS3Object({ key, fileType, fileSize });
+}
+
+export async function createItemAction({
+  fileName,
+  name,
+  startingPrice,
+}: CreateItemActionProps) {
   const session = await auth();
 
   if (!session || !session.user) throw new Error('Unauthorized');
 
-  const startingPrice = formData.get('startingPrice') as string;
-  const priceAsCents = Math.floor(parseFloat(startingPrice) * 100);
-
-  console.log({ startingPrice, priceAsCents });
-
   await database.insert(items).values({
-    name: formData.get('name') as string,
-    startingPrice: priceAsCents,
+    name,
+    startingPrice,
+    fileKey: fileName,
     userId: session.user.id!,
   });
   redirect('/');

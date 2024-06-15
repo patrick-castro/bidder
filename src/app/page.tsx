@@ -1,11 +1,5 @@
 import { auth } from '@/auth';
-import { SignIn } from '@/components/sign-in';
-import { SignOut } from '@/components/sign-out';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { database } from '@/db/database';
-import { bids as bidsSchema, items as itemsSchema } from '@/db/schema';
-import { revalidatePath } from 'next/cache';
 
 export default async function Home() {
   const session = await auth();
@@ -13,15 +7,6 @@ export default async function Home() {
   const allItems = await database.query.items.findMany();
 
   if (!session || !session.user) return null;
-
-  const handleSubmitForm = async (formData: FormData) => {
-    'use server';
-    await database.insert(itemsSchema).values({
-      name: formData.get('name') as string,
-      userId: session?.user?.id!,
-    });
-    revalidatePath('/');
-  };
 
   return (
     <main className='container mx-auto py-12 space-y-8'>
