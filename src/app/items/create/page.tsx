@@ -25,9 +25,6 @@ export default function CreateBids() {
       await fetch(url, {
         method: 'PUT',
         body: file,
-        headers: {
-          'Content-Type': file.type,
-        },
       });
 
       const name = formData.get('name') as string;
