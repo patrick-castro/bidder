@@ -15,12 +15,23 @@ export async function Header() {
             Bidder
           </Link>
 
-          <Link
-            href='/items/create'
-            className='hover:underline flex items-center gap-2'
-          >
-            Auction an Item
-          </Link>
+          <div className='flex items-center gap-8'>
+            <Link href='/' className='hover:underline flex items-center gap-2'>
+              All Auctions
+            </Link>
+            <Link
+              href='/items/create'
+              className='hover:underline flex items-center gap-2'
+            >
+              Create Auction
+            </Link>
+            <Link
+              href='/auctions'
+              className='hover:underline flex items-center gap-2'
+            >
+              My Auctions
+            </Link>
+          </div>
         </div>
 
         <div className='flex items-center gap-4'>
