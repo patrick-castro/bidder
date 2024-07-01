@@ -8,7 +8,7 @@ import { pageTitleStyles } from '@/styles';
 
 export default async function MyAuctionPage() {
   const session = await auth();
-  if (!session || !session.user) {
+  if (!session?.user) {
     throw new Error('unauthorized');
   }
 

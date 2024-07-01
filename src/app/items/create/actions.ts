@@ -27,7 +27,7 @@ export async function createItemAction({
 }: CreateItemActionProps) {
   const session = await auth();
 
-  if (!session || !session.user) throw new Error('Unauthorized');
+  if (!session?.user) throw new Error('Unauthorized');
 
   await database.insert(items).values({
     name,

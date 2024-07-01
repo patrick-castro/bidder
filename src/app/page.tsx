@@ -5,7 +5,7 @@ import { pageTitleStyles } from '@/styles';
 
 export default async function Home() {
   const session = await auth();
-  if (!session || !session.user) return null;
+  if (!session?.user) return null;
 
   const allItems = await database.query.items.findMany();
 
