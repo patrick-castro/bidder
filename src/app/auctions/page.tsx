@@ -3,6 +3,8 @@ import { database } from '@/db/database';
 import { ItemCard } from '../item-card';
 import { eq } from 'drizzle-orm';
 import { items } from '@/db/schema';
+import EmptyState from './empty-state';
+import { pageTitleStyles } from '@/styles';
 
 export default async function MyAuctionPage() {
   const session = await auth();
@@ -14,15 +16,20 @@ export default async function MyAuctionPage() {
     where: eq(items.userId, session.user.id!),
   });
 
-  return (
-    <main className='container mx-auto py-12 space-y-8'>
-      <h1 className='text-4xl font-bold'>Items for Sale</h1>
+  const hasItems = allItems.length > 0;
 
-      <div className='grid grid-cols-4 gap-4'>
-        {allItems.map((item) => (
-          <ItemCard key={item.id} item={item} />
-        ))}
-      </div>
+  return (
+    <main className='space-y-8'>
+      <h1 className={pageTitleStyles}>You Current Auctions</h1>
+      {hasItems ? (
+        <div className='grid grid-cols-4 gap-8'>
+          {allItems.map((item) => (
+            <ItemCard key={item.id} item={item} />
+          ))}
+        </div>
+      ) : (
+        <EmptyState />
+      )}
     </main>
   );
 }
