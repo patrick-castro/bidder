@@ -70,6 +70,7 @@ export function Header() {
                     <NotificationCell {...props} item={item}>
                       <div className='bg-gray-100 rounded-xl'>
                         <Link
+                          className='text-blue-400 hover:text-blue-500'
                           onClick={() => {
                             setIsVisible(false);
                           }}
