@@ -4,11 +4,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRef, useState } from 'react';
 import {
+  NotificationCell,
   NotificationFeedPopover,
   NotificationIconButton,
 } from '@knocklabs/react';
 import { signOut, signIn, useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
+import { formatCentsToDollar } from '@/util/currency';
 
 export function Header() {
   const [isVisible, setIsVisible] = useState(false);
@@ -61,6 +63,28 @@ export function Header() {
                 buttonRef={notifButtonRef}
                 isVisible={isVisible}
                 onClose={() => setIsVisible(false)}
+                renderItem={({ item, ...props }) => {
+                  if (!item?.data?.itemId) return null;
+
+                  return (
+                    <NotificationCell {...props} item={item}>
+                      <div className='bg-gray-100 rounded-xl'>
+                        <Link
+                          onClick={() => {
+                            setIsVisible(false);
+                          }}
+                          href={`/items/${item.data.itemId}`}
+                        >
+                          Someone outbidded you on{' '}
+                          <span className='font-bold'>
+                            {item.data.itemName}
+                          </span>{' '}
+                          by ${formatCentsToDollar(item.data.bidAmount)}
+                        </Link>
+                      </div>
+                    </NotificationCell>
+                  );
+                }}
               />
             </>
           )}

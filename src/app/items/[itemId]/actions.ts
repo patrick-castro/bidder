@@ -66,7 +66,6 @@ export async function createBidAction(itemId: number) {
     }
   }
 
-  console.log({ recipients });
   if (recipients.length > 0) {
     await knock.workflows.trigger('user-placed-bid', {
       actor: {
@@ -79,6 +78,7 @@ export async function createBidAction(itemId: number) {
       data: {
         itemId,
         bidAmount: latestBidValue,
+        itemName: item.name,
       },
     });
   }
