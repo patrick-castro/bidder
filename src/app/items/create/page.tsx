@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { createItemAction, createUploadUrlAction } from './actions';
 import { FormEvent } from 'react';
 import { pageTitleStyles } from '@/styles';
+import { DatePicker } from '@/components/date-picker';
 
 export default function CreateBids() {
   const handleOnSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -64,7 +65,7 @@ export default function CreateBids() {
           required
         />
         <Input type='file' name='file' />
-
+        <DatePicker />
         <Button className='self-end' type='submit'>
           Post Item
         </Button>
