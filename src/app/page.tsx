@@ -1,12 +1,8 @@
-import { auth } from '@/auth';
 import { database } from '@/db/database';
 import { ItemCard } from './item-card';
 import { pageTitleStyles } from '@/styles';
 
 export default async function Home() {
-  const session = await auth();
-  if (!session?.user) return null;
-
   const allItems = await database.query.items.findMany();
 
   return (

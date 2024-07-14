@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { createBidAction } from './actions';
 import { getBidsForItem } from '@/data-access/bids';
 import { getItem } from '@/data-access/items';
+import { auth } from '@/auth';
 
 interface PropType {
   params: {
@@ -20,6 +21,7 @@ function formatTimestamp(timestamp: Date) {
 }
 
 export default async function ItemPage({ params: { itemId } }: PropType) {
+  const session = await auth();
   const item = await getItem(parseInt(itemId));
 
   if (!item) {
@@ -41,6 +43,7 @@ export default async function ItemPage({ params: { itemId } }: PropType) {
 
   const allBids = await getBidsForItem(item.id);
   const hasBids = allBids.length > 0;
+  const canPlaceBid = session && item.userId !== session.user.id;
 
   return (
     <main className='space-y-8'>
@@ -81,9 +84,11 @@ export default async function ItemPage({ params: { itemId } }: PropType) {
           <div className='flex justify-between'>
             <h2 className='text-2xl font-bold'>Current Bids</h2>
 
-            <form action={createBidAction.bind(null, item.id)}>
-              <Button>Place a Bid</Button>
-            </form>
+            {canPlaceBid && (
+              <form action={createBidAction.bind(null, item.id)}>
+                <Button>Place a Bid</Button>
+              </form>
+            )}
           </div>
 
           {hasBids ? (
@@ -113,9 +118,11 @@ export default async function ItemPage({ params: { itemId } }: PropType) {
                 height={200}
               />
               <h2 className='text-2xl font-bold'>No bids yet</h2>
-              <form action={createBidAction.bind(null, item.id)}>
-                <Button>Place a Bid</Button>
-              </form>
+              {canPlaceBid && (
+                <form action={createBidAction.bind(null, item.id)}>
+                  <Button>Place a Bid</Button>
+                </form>
+              )}
             </div>
           )}
         </div>
